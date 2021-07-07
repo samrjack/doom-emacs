@@ -126,7 +126,9 @@ imported into Emacs."
       (format "%s -ic '%S env%s'"
               (string-trim
                (shell-command-to-string
-                (format "getent passwd %S | cut -d: -f7"
+                (format (if IS-MAC
+                            "dscacheutil -q user -a name %S | grep 'shell:' | cut -d : -f2"
+                          "getent passwd %S | cut -d: -f7")
                         (user-login-name))))
               doom-bin (if arg " -c" ""))
       (let ((doom-reloading-p t))
